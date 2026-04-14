@@ -7,9 +7,9 @@ const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send({ message: "Welcome to Choice Bazaar Backend system!" });
-});
+// app.get("/", (req, res) => {
+//   res.send({ message: "Welcome to Choice Bazaar Backend system!" });
+// });
 
 app.use(express.json());
 
@@ -74,9 +74,4 @@ app.use("/admin", adminRouters);
 app.use("/home", HomeCategoryRoutes);
 app.use("/admin/deals", dealRoutes);
 
-const PORT = 5000;
-
-// app.listen(PORT, async () => {
-//   console.log(`Server is run on port ${PORT}`);
-//   await connectDB();
-// });
+export default app;
