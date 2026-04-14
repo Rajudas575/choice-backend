@@ -1,63 +1,62 @@
 import express from "express";
-import connectDB from "./db/db.js";
-import bodyParser from "body-parser";
 import cors from "cors";
+import connectDB from "../db/db.js";
+
+import adminRouters from "../routers/AdminRouter.js";
+import sellerRouters from "../routers/SellerRouters.js";
+import authRouters from "../routers/AuthRouters.js";
+import userRouteres from "../routers/UserRouters.js";
+
+import productRoutes from "../routers/ProductRoute.js";
+import sellerProductRoutes from "../routers/SellerProductRoute.js";
+import cartRoutes from "../routers/CartRoute.js";
+import orderRoutes from "../routers/OrderRoutes.js";
+import sellerOrderRoutes from "../routers/SellerOrderRoutes.js";
+import paymentRoutes from "../routers/PaymentRoutes.js";
+import transactionRoutes from "../routers/TransactionRoutes.js";
+import sellerReportRoutes from "../routers/SellerReportRoutes.js";
+import HomeCategoryRoutes from "../routers/HomeCategoryRoutes.js";
+import dealRoutes from "../routers/DealRoutes.js";
 
 const app = express();
 
+// Middleware
 app.use(cors());
-
-// app.get("/", (req, res) => {
-//   res.send({ message: "Welcome to Choice Bazaar Backend system!" });
-// });
-
 app.use(express.json());
 
-import adminRouters from "./routers/AdminRouter.js";
-import sellerRouters from "./routers/SellerRouters.js";
-import authRouters from "./routers/AuthRouters.js";
-import userRouteres from "./routers/UserRouters.js";
+// MongoDB connection caching for serverless
+let cached = global.mongoose;
 
-import productRoutes from "./routers/ProductRoute.js";
-import sellerProductRoutes from "./routers/SellerProductRoute.js";
-import cartRoutes from "./routers/CartRoute.js";
-import orderRoutes from "./routers/OrderRoutes.js";
-import sellerOrderRoutes from "./routers/SellerOrderRoutes.js";
-import paymentRoutes from "./routers/PaymentRoutes.js";
-import transactionRoutes from "./routers/TransactionRoutes.js";
-import sellerReportRoutes from "./routers/SellerReportRoutes.js";
-import HomeCategoryRoutes from "./routers/HomeCategoryRoutes.js";
-import dealRoutes from "./routers/DealRoutes.js";
-
-
-//vercel setup
-let cachedConnection = null;
-
-async function connectToMongoDB() {
-  if (cachedConnection) return cachedConnection;
-
-  cachedConnection = await connectDB();
-
-  console.log("MongoDB connected");
-  return cachedConnection;
+if (!cached) {
+  cached = global.mongoose = { conn: null };
 }
 
+async function connectToDatabase() {
+  if (cached.conn) return cached.conn;
+
+  cached.conn = await connectDB();
+  console.log("MongoDB connected");
+  return cached.conn;
+}
+
+// Connect DB before every request
 app.use(async (req, res, next) => {
-  await connectToMongoDB();
+  await connectToDatabase();
   next();
 });
 
+// Test route
 app.get("/", (req, res) => {
-  res.json({ status: "Backend running" });
+  res.json({
+    status: "Backend running successfully 🚀",
+  });
 });
-//vercel setup
 
-
+// Routes
 app.use("/auth", authRouters);
 app.use("/api/users", userRouteres);
 app.use("/sellers", sellerRouters);
 app.use("/api/seller/orders", sellerOrderRoutes);
-
 
 app.use("/products", productRoutes);
 app.use("/api/sellers/products", sellerProductRoutes);
@@ -74,4 +73,5 @@ app.use("/admin", adminRouters);
 app.use("/home", HomeCategoryRoutes);
 app.use("/admin/deals", dealRoutes);
 
+// Export for Vercel
 export default app;
