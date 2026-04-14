@@ -24,8 +24,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection caching for serverless
-// MongoDB connection caching for serverless
+// ✅ MongoDB caching
 let cached = global.mongoose || { conn: null };
 global.mongoose = cached;
 
@@ -37,18 +36,18 @@ async function connectToDatabase() {
     console.log("MongoDB connected");
     return cached.conn;
   } catch (error) {
-    console.error("MongoDB connection error:", error);
+    console.error("MongoDB error:", error);
     throw error;
   }
 }
 
-// Connect DB before every request
+// ✅ SAFE DB connection middleware
 app.use(async (req, res, next) => {
   try {
     await connectToDatabase();
     next();
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Database connection failed",
       error: error.message,
     });
@@ -57,9 +56,7 @@ app.use(async (req, res, next) => {
 
 // Test route
 app.get("/", (req, res) => {
-  res.json({
-    status: "Backend running successfully 🚀",
-  });
+  res.json({ status: "Backend running successfully 🚀" });
 });
 
 // Routes
@@ -79,7 +76,6 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/sellers/report", sellerReportRoutes);
 
 app.use("/admin", adminRouters);
-
 app.use("/home", HomeCategoryRoutes);
 app.use("/admin/deals", dealRoutes);
 
