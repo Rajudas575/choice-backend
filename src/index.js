@@ -3,20 +3,20 @@ import cors from "cors";
 import connectDB from "./db/db.js";
 
 import adminRouters from "./routers/AdminRouter.js";
-import sellerRouters from "../routers/SellerRouters.js";
-import authRouters from "../routers/AuthRouters.js";
+import sellerRouters from "./routers/SellerRouters.js";
+import authRouters from "./routers/AuthRouters.js";
 import userRouteres from "./routers/UserRouters.js";
 
-import productRoutes from "../routers/ProductRoute.js";
+import productRoutes from "./routers/ProductRoute.js";
 import sellerProductRoutes from "../routers/SellerProductRoute.js";
-import cartRoutes from "../routers/CartRoute.js";
-import orderRoutes from "../routers/OrderRoutes.js";
+import cartRoutes from "./routers/CartRoute.js";
+import orderRoutes from "./routers/OrderRoutes.js";
 import sellerOrderRoutes from "../routers/SellerOrderRoutes.js";
-import paymentRoutes from "../routers/PaymentRoutes.js";
-import transactionRoutes from "../routers/TransactionRoutes.js";
-import sellerReportRoutes from "../routers/SellerReportRoutes.js";
-import HomeCategoryRoutes from "../routers/HomeCategoryRoutes.js";
-import dealRoutes from "../routers/DealRoutes.js";
+import paymentRoutes from "./routers/PaymentRoutes.js";
+import transactionRoutes from "./routers/TransactionRoutes.js";
+import sellerReportRoutes from "./routers/SellerReportRoutes.js";
+import HomeCategoryRoutes from "./routers/HomeCategoryRoutes.js";
+import dealRoutes from "./routers/DealRoutes.js";
 
 const app = express();
 
