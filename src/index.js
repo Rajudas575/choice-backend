@@ -44,12 +44,14 @@ async function connectToDatabase() {
 // ✅ SAFE DB connection middleware
 app.use(async (req, res, next) => {
   try {
-    await connectToDatabase();
+    if (!cached.conn) {
+      await connectToDatabase();
+    }
     next();
   } catch (error) {
+    console.error("DB connection failed:", error);
     return res.status(500).json({
       message: "Database connection failed",
-      error: error.message,
     });
   }
 });

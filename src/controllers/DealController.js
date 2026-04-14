@@ -4,6 +4,7 @@ class DealController {
   async getAllDeals(req, res) {
     try {
       const deal = req.body;
+      console.log("DEAL from Controller--", deal);
       const deals = await DealService.getDeals(deal);
       return res.status(201).json(deals);
     } catch (error) {
