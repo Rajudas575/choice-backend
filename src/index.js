@@ -11,7 +11,7 @@ import productRoutes from "./routers/ProductRoute.js";
 import sellerProductRoutes from "../routers/SellerProductRoute.js";
 import cartRoutes from "./routers/CartRoute.js";
 import orderRoutes from "./routers/OrderRoutes.js";
-import sellerOrderRoutes from "../routers/SellerOrderRoutes.js";
+import sellerOrderRoutes from "./routers/SellerOrderRoutes.js";
 import paymentRoutes from "./routers/PaymentRoutes.js";
 import transactionRoutes from "./routers/TransactionRoutes.js";
 import sellerReportRoutes from "./routers/SellerReportRoutes.js";
