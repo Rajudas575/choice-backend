@@ -3,7 +3,7 @@ import DataInitializationService from "../../service/DataInitializationService.j
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(url);
+    const conn = await mongoose.connect(process.env.MONGO_URL);
 
     console.log(`MongoDb Connected: ${conn.connection.host}`);
 
@@ -12,7 +12,7 @@ const connectDB = async () => {
     return conn; // ✅ VERY IMPORTANT
   } catch (error) {
     console.log(`MongoDB Error: ${error}`);
-    throw error; // ✅ also important
+    throw error; // ✅ instead of process.exit
   }
 };
 
