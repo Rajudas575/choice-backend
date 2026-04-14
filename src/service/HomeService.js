@@ -1,0 +1,36 @@
+import HomeCategorySection from "../domain/HomeCategorySection.js";
+import DealService from "./DealService.js";
+
+class HomeService {
+  async createHomePageData(allCategories) {
+    const gridCategories = allCategories.filter(
+      (category) => category.section === HomeCategorySection.GRID,
+    );
+
+    const shopByCategories = allCategories.filter(
+      (category) => category.section === HomeCategorySection.SHOP_BY_CATEGORIES,
+    );
+
+    const electricCategories = allCategories.filter(
+      (category) =>
+        category.section === HomeCategorySection.ELECTRIC_CATEGORIES,
+    );
+
+    const dealCategories = allCategories.filter(
+      (category) => category.section === HomeCategorySection.DEALS,
+    );
+
+    const deals = await DealService.getDeals();
+
+    const home = {
+      grid: dealCategories,
+      shopByCategories: shopByCategories,
+      electricCategories: electricCategories,
+      deals: deals,
+      dealCategories: dealCategories,
+    };
+    return home;
+  }
+}
+
+export default new HomeService();
