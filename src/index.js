@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import connectDB from "./db/db.js";
+import connectDB from "./config/db/db.js";
 
 import adminRouters from "./routers/AdminRouter.js";
 import sellerRouters from "./routers/SellerRouters.js";
