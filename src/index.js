@@ -25,19 +25,35 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection caching for serverless
+// MongoDB connection caching for serverless
 let cached = global.mongoose || { conn: null };
 global.mongoose = cached;
 
 async function connectToDatabase() {
   if (cached.conn) return cached.conn;
 
-  cached.conn = await connectDB();
-  console.log("MongoDB connected");
-  return cached.conn;
+  try {
+    cached.conn = await connectDB();
+    console.log("MongoDB connected");
+    return cached.conn;
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    throw error;
+  }
 }
 
 // Connect DB before every request
-await connectToDatabase();
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    res.status(500).json({
+      message: "Database connection failed",
+      error: error.message,
+    });
+  }
+});
 
 // Test route
 app.get("/", (req, res) => {
