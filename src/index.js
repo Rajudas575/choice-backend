@@ -1,22 +1,22 @@
 import express from "express";
 import cors from "cors";
-import connectDB from "./config/db/db.js";
+import connectDB from "../src/config/db/db.js";
 
-import adminRouters from "./routers/AdminRouter.js";
-import sellerRouters from "./routers/SellerRouters.js";
-import authRouters from "./routers/AuthRouters.js";
-import userRouteres from "./routers/UserRouters.js";
+import adminRouters from "../src/routers/AdminRouter.js";
+import sellerRouters from "../src/routers/SellerRouters.js";
+import authRouters from "../src/routers/AuthRouters.js";
+import userRouteres from "../src/routers/UserRouters.js";
 
-import productRoutes from "./routers/ProductRoute.js";
-import sellerProductRoutes from "../routers/SellerProductRoute.js";
-import cartRoutes from "./routers/CartRoute.js";
-import orderRoutes from "./routers/OrderRoutes.js";
-import sellerOrderRoutes from "./routers/SellerOrderRoutes.js";
-import paymentRoutes from "./routers/PaymentRoutes.js";
-import transactionRoutes from "./routers/TransactionRoutes.js";
-import sellerReportRoutes from "./routers/SellerReportRoutes.js";
-import HomeCategoryRoutes from "./routers/HomeCategoryRoutes.js";
-import dealRoutes from "./routers/DealRoutes.js";
+import productRoutes from "../src/routers/ProductRoute.js";
+import sellerProductRoutes from "../src/routers/SellerProductRoute.js";
+import cartRoutes from "../src/routers/CartRoute.js";
+import orderRoutes from "../src/routers/OrderRoutes.js";
+import sellerOrderRoutes from "../src/routers/SellerOrderRoutes.js";
+import paymentRoutes from "../src/routers/PaymentRoutes.js";
+import transactionRoutes from "../src/routers/TransactionRoutes.js";
+import sellerReportRoutes from "../src/routers/SellerReportRoutes.js";
+import HomeCategoryRoutes from "../src/routers/HomeCategoryRoutes.js";
+import dealRoutes from "../src/routers/DealRoutes.js";
 
 const app = express();
 
@@ -25,11 +25,8 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection caching for serverless
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null };
-}
+let cached = global.mongoose || { conn: null };
+global.mongoose = cached;
 
 async function connectToDatabase() {
   if (cached.conn) return cached.conn;
@@ -40,10 +37,7 @@ async function connectToDatabase() {
 }
 
 // Connect DB before every request
-app.use(async (req, res, next) => {
-  await connectToDatabase();
-  next();
-});
+await connectToDatabase();
 
 // Test route
 app.get("/", (req, res) => {
