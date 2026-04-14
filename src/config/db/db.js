@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import DataInitializationService from "../../service/DataInitializationService.js";
 
 const url =
-  "mongodb+srv://rajudas575_db_user:jfVKk83EBlb7rASv@choicebazzar.witn8p9.mongodb.net/?appName=choicebazzar";
+  "mongodb+srv://rajudas575_db:jfVKk83EBlb7rASv@zzar.witn8p9.mongodb.net/?appName=choicebazzar";
 
 const connectDB = async () => {
   try {
