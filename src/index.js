@@ -5,7 +5,7 @@ import connectDB from "./db/db.js";
 import adminRouters from "../routers/AdminRouter.js";
 import sellerRouters from "../routers/SellerRouters.js";
 import authRouters from "../routers/AuthRouters.js";
-import userRouteres from "../routers/UserRouters.js";
+import userRouteres from "./routers/UserRouters.js";
 
 import productRoutes from "../routers/ProductRoute.js";
 import sellerProductRoutes from "../routers/SellerProductRoute.js";
