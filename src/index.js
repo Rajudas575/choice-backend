@@ -41,7 +41,7 @@ async function connectToDatabase() {
   }
 }
 
-// ✅ SAFE DB connection middleware
+// DB connection middleware
 app.use(async (req, res, next) => {
   try {
     if (!cached.conn) {
