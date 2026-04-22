@@ -112,66 +112,132 @@ class ProductService {
     return await Product.find({ seller: sellerId });
   }
 
+  // async getAllProducts(req) {
+  //   const filterQuery = {};
+
+  //   if (req.category) {
+  //     const category = await Category.findOne({ categoryId: req.category });
+
+  //     if (!category) {
+  //       return {
+  //         content: [],
+  //         totalpages: 0,
+  //         totalElement: 0,
+  //       };
+  //     }
+
+  //     filterQuery.category = category._id;
+  //   }
+
+  //   if (req.color) {
+  //     filterQuery.color = req.color;
+  //   }
+
+  //   if (req.minPrice && req.maxPrice) {
+  //     filterQuery.sellingPrice = {
+  //       $gte: Number(req.minPrice),
+  //       $lte: Number(req.maxPrice),
+  //     };
+  //   }
+
+  //   if (req.minDiscount) {
+  //     filterQuery.discountPercent = { $gte: Number(req.minDiscount) };
+  //   }
+
+  //   if (req.size) {
+  //     filterQuery.size = req.size;
+  //   }
+
+  //   let sortQuery = { createdAt: -1 };
+
+  //   if (req.sort === "price_low") {
+  //     sortQuery = { sellingPrice: 1 };
+  //   } else if (req.sort === "price_high") {
+  //     sortQuery = { sellingPrice: -1 };
+  //   }
+
+  //   const page = Number(req.pageNumber) || 0;
+
+  //   const products = await Product.find(filterQuery)
+  //     .sort(sortQuery)
+  //     .skip(page * 10)
+  //     .limit(10);
+
+  //   const totalElement = await Product.countDocuments(filterQuery);
+
+  //   const totalpages = Math.ceil(totalElement / 10);
+
+  //   return {
+  //     content: products,
+  //     totalpages,
+  //     totalElement,
+  //   };
+  // }
+
   async getAllProducts(req) {
     const filterQuery = {};
-
     if (req.category) {
       const category = await Category.findOne({ categoryId: req.category });
 
       if (!category) {
         return {
           content: [],
-          totalpages: 0,
-          totalElement: 0,
+          totalPages: 0,
+          totalElements: 0,
         };
       }
-
-      filterQuery.category = category._id;
+      filterQuery.category = category._id.toString();
     }
-
     if (req.color) {
       filterQuery.color = req.color;
     }
-
-    if (req.minPrice && req.maxPrice) {
-      filterQuery.sellingPrice = {
-        $gte: Number(req.minPrice),
-        $lte: Number(req.maxPrice),
-      };
-    }
-
-    if (req.minDiscount) {
-      filterQuery.discountPercent = { $gte: Number(req.minDiscount) };
-    }
-
     if (req.size) {
       filterQuery.size = req.size;
     }
-
-    let sortQuery = { createdAt: -1 };
-
-    if (req.sort === "price_low") {
-      sortQuery = { sellingPrice: 1 };
-    } else if (req.sort === "price_high") {
-      sortQuery = { sellingPrice: -1 };
+    if (req.minPrice) {
+      filterQuery.sellingPrice = { $gte: req.minPrice };
+    }
+    if (req.maxPrice) {
+      filterQuery.sellingPrice = {
+        ...filterQuery.sellingPrice,
+        $lte: req.maxPrice,
+      };
+    }
+    if (req.minDiscount) {
+      filterQuery.discountPercent = { $gte: req.minDiscount };
+    }
+    if (req.stock) {
+      filterQuery.stock = req.stock;
     }
 
-    const page = Number(req.pageNumber) || 0;
+    let sortQuery = {};
+    if (req.sort === "price_low") {
+      sortQuery.sellingPrice = 1;
+    } else if (req.sort === "price_high") {
+      sortQuery.sellingPrice = -1;
+    }
 
     const products = await Product.find(filterQuery)
       .sort(sortQuery)
-      .skip(page * 10)
+      .skip(req.pageNumber * 10)
       .limit(10);
 
-    const totalElement = await Product.countDocuments(filterQuery);
+    const page = parseInt(req.pageNumber) || 0;
+    const pageSize = parseInt(req.pageSize) || 10;
 
-    const totalpages = Math.ceil(totalElement / 10);
+    // Count the total number of products matching the filter query
+    const totalElements = await Product.countDocuments(filterQuery);
 
-    return {
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalElements / pageSize);
+
+    const res = {
       content: products,
-      totalpages,
-      totalElement,
+      totalPages,
+      totalElements,
     };
+
+    return res;
   }
 }
 
