@@ -166,12 +166,13 @@ class ProductService {
   //   const totalElement = await Product.countDocuments(filterQuery);
 
   //   const totalpages = Math.ceil(totalElement / 10);
-
-  //   return {
+  //   const res={
   //     content: products,
   //     totalpages,
   //     totalElement,
   //   };
+
+  //   return res
   // }
 
   async getAllProducts(req) {
