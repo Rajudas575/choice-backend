@@ -1,59 +1,74 @@
 import mongoose from "mongoose";
 
-const productsSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
+// Define the Product schema
+const productSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    mrpPrice: {
+      type: Number,
+      required: true,
+    },
+    sellingPrice: {
+      type: Number,
+      required: true,
+    },
+    discountPercent: {
+      type: Number,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      // required: true
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+    images: {
+      type: [String], // Array of strings for image URLs
+      default: [],
+    },
+    numRatings: {
+      type: Number,
+      default: 0,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seller",
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    sizes: {
+      type: String,
+      required: false,
+    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+        default: [],
+      },
+    ],
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
+  {
+    timestamps: true,
   },
-  mrpPrice: {
-    type: Number,
-    required: true,
-  },
-  sellingPrice: {
-    type: Number,
-    required: true,
-  },
-  discountPercent: {
-    type: Number,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-  color: {
-    type: String,
-    required: true,
-  },
-  images: {
-    type: [String],
-    required: true,
-  },
-  category: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Category",
-    required: true,
-  },
-  seller: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Seller",
-    required: true,
-  },
-  size: {
-    type: String,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    require: true,
-  },
-});
+);
 
-const Product = mongoose.model("Product", productsSchema);
+const Product = mongoose.model("Product", productSchema);
 export default Product;
